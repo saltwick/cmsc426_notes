@@ -1,4 +1,6 @@
+<div style="text-align: right">Sam Saltwick </div>
 <div style="text-align: right">October 9th 2018 </div>
+<div style="text-align: right">CMSC426 Fall 2018 </div>
 
 #  Texture     
 ---
