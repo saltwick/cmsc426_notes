@@ -1,4 +1,7 @@
-#  Texture
+<div style="text-align: right">October 9th 2018 </div>
+
+#  Texture     
+---
 
 ## Issues
 1. Analysis
@@ -20,7 +23,7 @@
 - Simplest comparison is SSD
 - View histograms
     + Test probability samples drawn from same distribution
-- Chi squared distance between histograms
+- Chi squared distance between histograms 
 
 $$
 \chi^2(h_i, h_j) = \frac{1}2 \sum_{m=0}^k \frac{[h_i(m) - h_j(m)]^2}{[h_i(m) - h_j(m)]}
@@ -46,7 +49,6 @@ $$
    \hline
     & C & 
 \end{array}
-
 $$
 
 ## Texture Synthesis
@@ -62,4 +64,3 @@ $$
 - Increasing window size -> Better results 
 
 
-    
