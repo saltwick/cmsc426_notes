@@ -3,7 +3,6 @@
 <div style="text-align: right">CMSC426 Fall 2018 </div>
 
 # Image Motion
----
 
 ## Information from Image Motion
 - 3D motion between observer and scene + structure of the scene
