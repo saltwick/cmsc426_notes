@@ -1,0 +1,306 @@
+\documentclass[10pt,landscape]{article}
+\usepackage{multicol}
+\usepackage{calc}
+\usepackage{ifthen}
+\usepackage[landscape]{geometry}
+\usepackage{hyperref}
+\usepackage{amsmath}
+
+% To make this come out properly in landscape mode, do one of the following
+% 1.
+%  pdflatex latexsheet.tex
+%
+% 2.
+%  latex latexsheet.tex
+%  dvips -P pdf  -t landscape latexsheet.dvi
+%  ps2pdf latexsheet.ps
+
+
+% If you're reading this, be prepared for confusion.  Making this was
+% a learning experience for me, and it shows.  Much of the placement
+% was hacked in; if you make it better, let me know...
+
+
+% 2008-04
+% Changed page margin code to use the geometry package. Also added code for
+% conditional page margins, depending on paper size. Thanks to Uwe Ziegenhagen
+% for the suggestions.
+
+% 2006-08
+% Made changes based on suggestions from Gene Cooperman. <gene at ccs.neu.edu>
+
+
+% To Do:
+% \listoffigures \listoftables
+% \setcounter{secnumdepth}{0}
+
+
+% This sets page margins to .5 inch if using letter paper, and to 1cm
+% if using A4 paper. (This probably isn't strictly necessary.)
+% If using another size paper, use default 1cm margins.
+\ifthenelse{\lengthtest { \paperwidth = 11in}}
+	{ \geometry{top=.2in,left=.2in,right=.2in,bottom=.2in} }
+	{\ifthenelse{ \lengthtest{ \paperwidth = 297mm}}
+		{\geometry{top=1cm,left=1cm,right=1cm,bottom=1cm} }
+		{\geometry{top=1cm,left=1cm,right=1cm,bottom=1cm} }
+	}
+
+% Turn off header and footer
+\pagestyle{empty}
+ 
+
+% Redefine section commands to use less space
+\makeatletter
+\renewcommand{\section}{\@startsection{section}{1}{0mm}%
+                                {-1ex plus -.5ex minus -.2ex}%
+                                {0.5ex plus .2ex}%x
+                                {\normalfont\large\bfseries}}
+\renewcommand{\subsection}{\@startsection{subsection}{2}{0mm}%
+                                {-1explus -.5ex minus -.2ex}%
+                                {0.5ex plus .2ex}%
+                                {\normalfont\normalsize\bfseries}}
+\renewcommand{\subsubsection}{\@startsection{subsubsection}{3}{0mm}%
+                                {-1ex plus -.5ex minus -.2ex}%
+                                {1ex plus .2ex}%
+                                {\normalfont\small\bfseries}}
+\makeatother
+
+% Define BibTeX command
+\def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
+    T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
+
+% Don't print section numbers
+\setcounter{secnumdepth}{0}
+
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0pt plus 0.5ex}
+
+
+% -----------------------------------------------------------------------
+
+\begin{document}
+
+\raggedright
+\footnotesize
+\begin{multicols}{3}
+
+
+% multicol parameters
+% These lengths are set only within the two main columns
+%\setlength{\columnseprule}{0.25pt}
+\setlength{\premulticols}{1pt}
+\setlength{\postmulticols}{1pt}
+\setlength{\multicolsep}{1pt}
+\setlength{\columnsep}{2pt}
+
+\section{Convolution and Filters}
+\[
+\text{Gaussian Kernel} \implies \frac{1}{16}\begin{bmatrix} 1 & 2 & 1\\ 2&4&2\\1&2&1\end{bmatrix}
+\]
+\[
+\text{Sobel Kernel} \implies 
+G_x = \begin{bmatrix} 1 & 0 & -1\\ 2&0&-2\\1&0&-1\end{bmatrix},
+G_y = \begin{bmatrix} 1 & 2 & 1\\ 0&0&0\\-1&-2&-1\end{bmatrix}
+\]
+\[
+Sharpen \implies \begin{bmatrix} 0&-1&0 \\ -1&5&-1 \\ 0&5&0 \end{bmatrix}
+\]
+
+\begin{itemize}
+        \item Zero padding $\rightarrow$ Pad edges of matrix with all 0's
+        \item Reflection padding $\rightarrow$ Reflect end of matrix 
+        \item Repeated Cyclic $\rightarrow \begin{bmatrix} {\begin{vmatrix} y & z \end{vmatrix}} a & b &...&y&z \end{bmatrix}$
+        \item Repeated Edge
+        \item Box filters cause artifacts $\rightarrow$ Gaussian filters better for images
+        \item Correlation is not associative $\implies$ cannot combine filters
+\end{itemize}
+
+\subsection{Projective Geometry}
+\newlength{\MyLen}
+\settowidth{\MyLen}{\texttt{letterpaper}/\texttt{a4paper} \ }
+\begin{itemize}
+        \item Pinhole Model
+        \begin{itemize}
+             \item Projection from 3D onto 2D plane
+             \item Vanishing point at infinity $\implies$ line is in plane parallel to camera plane
+            \[y = \frac{fY}{Z}, x = \frac{fX}{Z}\]
+            \item Orthographic Projection keeps parallel lines
+        \end{itemize}
+\end{itemize}
+Given 4 points on an image find the vanishing lines
+$$
+A = (2,3) , B = (5,6) , C = (10,15) , D = (11,17)
+$$
+Convert to 3D coordinates using $z= f$
+$$
+A = (2,3,1) , B = (5,6,1) , C = (10,15,1) , D = (11,17,1)
+$$
+Find $V_1$ by finding intersection of  $\overline{AB}$ and $\overline{BC}$
+$\overline{AB} = \vec{a} \times \vec{b}$
+$$
+\begin{vmatrix} a_x & a_y & a_z \\ b_x & b_y & b_z \\ i&j&k\end{vmatrix} = i \cdot \underbrace{\begin{vmatrix} a_y & a_z \\ b_y & b_z\end{vmatrix}}_{\text{x}} - j \cdot \underbrace{\begin{vmatrix} a_x & a_z \\ b_x & b_z\end{vmatrix}}_{\text{y}} + k \cdot \underbrace{\begin{vmatrix} a_x & a_y \\ b_x & b_y\end{vmatrix}}_{\text{z}}
+$$
+Alternate Cross Product calculation
+$$
+c_x = a_y \cdot b_z - a_z \cdot b_y,
+c_y = a_z \cdot b_x - a_x \cdot b_z, 
+c_z = a_x \cdot b_y - a_y \cdot b_x
+$$
+Repeat cross product of $\vec{c}$ and $\vec{d}$ to get $\overline{CD}$
+$$
+\overline{AB} = (-3, 3, -3), \overline{CD} = (-,-,-)
+$$
+Cross Product of two lines $\rightarrow$ Vanishing Point
+
+\subsection{Geometric Transformations}
+\settowidth{\MyLen}{\texttt{multicol} }
+\[
+\text{Projective/Homography (8DoF/4pts)} \implies 
+\begin{bmatrix}h_{11}&h_{12}&h_{13}
+\\
+h_{21}&h_{22}&h_{23}
+\\
+h_{31}&h_{32}&h_{33}\end{bmatrix}
+\]
+
+Invariants -  Colinearity, Cross Ratios
+
+\[
+\text{Affine (6DoF/3pts)} \implies 
+\begin{bmatrix}a_{11}&a_{12}&t_x\\a_{21}&a_{22}&t_y\\0&0&1\end{bmatrix}
+\]
+Invariants - Parallelism, Area Ratios, Length Ratios
+\[
+\text{Similarity (4DoF/2pts)} \implies 
+\begin{bmatrix}sr_{11}&sr_{12}&t_x\\sr_{21}&sr_{22}&t_y\\0&0&1\end{bmatrix}
+\]
+Invariants -  Angles, Length Ratios
+\[
+\text{Euclidean/Translation (3DoF/2pts)} \implies 
+\begin{bmatrix}r_{11}&r_{12}&t_x\\r_{21}&r_{22}&t_y\\0&0&1\end{bmatrix}
+\]
+Invariants -  Angles, Length Ratios
+\begin{itemize}
+        \item Solve for homography given 4 points
+        \[
+                \begin{bmatrix}\prime{x_1} \\ \prime{y_1}\end{bmatrix} = \begin{bmatrix} m_1 & m_2 \\ m_3 & m_4\end{bmatrix} + \begin{bmatrix} t_1 \\ t_2 \end{bmatrix}               
+        \]
+        \[
+                \begin{bmatrix}x_1 & y_1 & 0 & 0 & 1 & 0 \\ 0&0& x_1 & y_1 & 0 & 0 \\ ...&...&...&...&...&...\end{bmatrix}
+                \begin{bmatrix}m_1\\m_2\\m_3\\m_4\\t_1\\t_2\end{bmatrix} 
+                = 
+                \begin{bmatrix}\prime{x_1}\\ \prime{y_1} \\ \prime{x_2}\\ \prime{y_2} \\ . \\.\end{bmatrix}
+        \]
+\end{itemize}
+
+\subsection{RANSAC}
+\settowidth{\MyLen}{\texttt{.author.text.} }
+RANSAC process: 
+\begin{enumerate}
+        \item Select n feature pairs at random, n = points required for transform
+        \item Compute affine transform $T$ - n points $\implies$ solve system for $T$ 
+        \item Computer inliers $\rightarrow$ distance < thresh
+        \item Keep largest set of inliers
+        \item Recompute $T$ using all inliers $\rightarrow$ find $T$ using Least Squares
+\end{enumerate}
+RANSAC iterations:
+For each iteration, probability of outlier is
+\[
+   p = 1 - (1 - p_{outliers})^n, n = \text{points required}   
+\]
+After $i$ iterations, probability of at least 1 iteration having zero outliers:
+\[
+   1 - p^i = c, c = text{required confidence}     
+\]
+Solve above for $i$ or find number of iterations $N$ with required probability $p$ and outlier ratio $e$, and points required $n$
+\[
+   N = \frac{log(1-p)}{log(1-(1-e)^n)}     
+\]
+\section{Image Features}
+\settowidth{\MyLen}{\texttt{.begin.quotation.}}
+Harris Corner Detector
+\begin{enumerate}
+        \item Compute image derivatives $I_x, I_y$ by convolving I with derivatives of Gaussian filter
+        \item Form Harris Matrix $\implies H(x,y) = \sum_{u,v} g(u,v) \begin{bmatrix}I_x^2 & I_x I_y \\ I_x I_y & I_y^2\end{bmatrix}$
+        \item Select points such that $K(x,y) = frac{det(H)}{trace(H)}$ is above a threshold
+        \item Perform non-maximal suppression
+\end{enumerate}
+Invariant means that the value of the descriptor shouldn't change when the image undergoes a change in appearance (brightness, rotation, etc.)
+This is useful for matching features between different images of the same scene which may look slightly different.
+SIFT Process:
+\begin{enumerate} 
+        \item Compute Corners
+        \item Adaptive Non Maximal Suppression
+        \item Compute feature descriptor at each point
+        \begin{enumerate}
+                \item Take 40 px window centered on point
+                \item Downsample to 8x8
+                \item Blur 
+                \item Convert to 64x1 array
+        \end{enumerate}
+        \item Compute SSD for each pair of points $\rightarrow$ keep matches where ratio between first best and second best is low
+        \item RANSAC to compute Homography
+\end{enumerate}
+ANMS $\rightarrow$ Ensure points are equally distributed across image. Pick regional maxima.
+
+\subsection{Color Spaces}
+\settowidth{\MyLen}{\texttt{.begin.quotation.}}
+$L^*a^*b^* \rightarrow$ lightness, green - red, blue - yellow. Change in value = change in importance
+\\ HSL $\rightarrow$ hue, saturation, lightness
+\\ Why use different spaces? May be able to identify patterns more invariantly in some spaces vs. others
+
+
+\subsection{Optical Flow}
+Vector field of pixel motion between images \\
+Pencil - All lines through a single point \\
+Ego Motion - How the system itself is moving \\
+Rotation $\implies$ Flow becomes tangential to concentric circles around axis of rotation \\
+Rotation around horiz/vertical axis with velocity in that direction $\implies$ tangential to concentric hyperbolas that limit to opposite \\
+Aperture Problem $\implies$ Only information of a line moving through a hole is motion perpendicular to line \\
+$I(x,y,t) = I(x,y,t) + \frac{\partial{I}}{\partial{x}} \frac{dx}{dt} + \frac{\partial{I}}{\partial{y}} \frac{dy}{dt} + \frac{\partial{I}}{\partial{t}} \frac{dt}{dt} $
+
+Low texture regions (*i.e. sky*)
+\begin{itemize}
+        \item Gradients have small magnitudes 
+        \item Small $\lambda_1$, small $\lambda_2$
+\end{itemize}
+High texture regions (*i.e. ground*)
+\begin{itemize}
+        \item Gradients are different, large magnitudes
+        \item Large $\lambda_1$, large $\lambda_2$
+\end{itemize}
+Equations:
+Rotational Vector = $\begin{bmatrix} \alpha \\ \beta \\ \gamma \end{bmatrix}$    Translational vector = $\begin{bmatrix} u \\ v \\ w \end{bmatrix}$
+$$
+u(x,y) = \frac{-U + xW}{Z},
+v(x,y) = \frac{-V + yW}{Z} 
+$$
+
+Flow will be along lines that pass through the camera center
+Flow values increase as you move further away from the origin since they are linear with $x$ and $y$ \\
+
+Rotational flow equations:
+$$
+\dot{x} = \alpha x y - \beta(1+x^2) + \gamma y,\text{  } 
+\dot{y} = \alpha(1 + y^2) - \beta x y + \gamma x
+$$
+Sum of translational and rotational optical flow
+$$
+u = \frac{W}{Z} (x - \frac{U}{W}) + \alpha x y - \beta(1+x^2) + \gamma y 
+$$
+$$
+v = \frac{W}{Z} (y - \frac{V}{W}) + \dot{y} = \alpha(1 + y^2) - \beta x y + \gamma x
+$$
+Find flow from vector field: \\
+Only have W and $\gamma \rightarrow$  Moving straight and rotating around axis of translation \\
+Derotate $\rightarrow$ Check if flow makes a pencil
+
+\subsection{GMM}
+Multiple Gaussians to cover more varying color distributions
+Steps: 1. Initialize $\pi, \mu, \Sigma$ to random. 
+2. Alternate between expectation (eval model,assign points to clusters) and Maximization step (eval best parameters to fit points)
+3. Estimate posterior with calculated $\pi, \mu, \Sigma$
+
+\end{multicols}
+\end{document}

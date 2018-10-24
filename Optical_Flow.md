@@ -41,7 +41,7 @@
 - $(\frac{dx}{dt}, \frac{dy}{dt}) = (u,v)$<br><br>
 - $\begin{bmatrix} \dot{x} \\ \dot{y} \\ \dot{z} \end{bmatrix} = - \begin{bmatrix} u \\ v \\ w \end{bmatrix} \therefore \dot{x} = u, \dot{y} = v, \dot{z} = w$<br><br>
 
-- $\frac{\dot{x}  = \dot{x}Z - x\dot{z}}{Z^2}$
+- $\dot{x}  = \frac{\dot{x}Z - x\dot{z}}{Z^2}$
 
 - Flow equations for only translation
     + $u = \frac{W}{Z} (x - \frac{U}{W})$<br><br>
@@ -57,7 +57,7 @@
 - Flow with unrestricted movement (rotation and translation)
     + Sum of translational and rotational equations
     + $u = \frac{W}{Z} (x - \frac{U}{W}) + \alpha x y - \beta(1+x^2) + \gamma y$<br><br>
-    + $v = \frac{W}{Z} (y - \frac{V}{W}) + \dot{y} = \alpha(1 + y^2) - \beta x y + \gamma x$<br><br>
+    + $v = \frac{W}{Z} (y - \frac{V}{W}) + \alpha(1 + y^2) - \beta y + \gamma x$<br><br>
 -  \**Note*: Rotation is separate from scene
     + Rotational flow will be the same across scenes
     + Independent of distance

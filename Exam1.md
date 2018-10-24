@@ -96,3 +96,71 @@
     $$
     \begin{bmatrix}\prime{x_1} \\ \prime{y_1}\end{bmatrix} = \begin{bmatrix} m_1 & m_2 \\ m_3 & m_4\end{bmatrix} + \begin{bmatrix} t_1 \\ t_2 \end{bmatrix}
     $$
+
+
+## Solving Problems in Class
+- Given 4 points on an image and the vanishing lines, compute the vanishing points from the coordinates of A,B,C,D
+- Use projective coordinates
+- Draw 3D projection onto plane
+- *Example*
+    $$
+    A = (2,3) , B = (5,6) , C = (10,15) , D = (11,17)
+    $$
+    + Convert to 3D coordinates using $z= f$
+    $$
+    A = (2,3,1) , B = (5,6,1) , C = (10,15,1) , D = (11,17,1)
+    $$
+    + Find $V_1$ by finding intersection of  $\overline{AB}$ and $\overline{BC}$
+    $$
+    \overline{AB} = \vec{a} \times \vec{b}
+    \\[1em]
+    \begin{vmatrix} a_x & a_y & a_z \\ b_x & b_y & b_z \\ i&j&k\end{vmatrix} = i \cdot \underbrace{\begin{vmatrix} a_y & a_z \\ b_y & b_z\end{vmatrix}}_{\text{x}} - j \cdot \underbrace{\begin{vmatrix} a_x & a_z \\ b_x & b_z\end{vmatrix}}_{\text{y}} + k \cdot \underbrace{\begin{vmatrix} a_x & a_y \\ b_x & b_y\end{vmatrix}}_{\text{z}}
+    $$
+    + Alternate Cross Product calculation
+    $$
+    c_x = a_y \cdot b_z - a_z \cdot b_y \\
+    c_y = a_z \cdot b_x - a_x \cdot b_z \\
+    c_z = a_x \cdot b_y - a_y \cdot b_x
+    $$
+    + Repeat cross product of $\vec{c}$ and $\vec{d}$ to get $\overline{CD}$
+    $$
+    \overline{AB} = (-3, 3, -3), \overline{CD} = (-,-,-)
+    $$
+    + Vanishing Point $V_1$ is where $\overline{AB}$ and $\overline{CD}$ cross
+        - Cross Product of the two lines gives their intersection -> Vanishing Point
+
+- Given camera with focal length $f$, translation $(U,V,W)$ and a 3D plot with 2 planes -> Find Optical Flow function
+    $$
+    u(x,y) = \frac{-U + xW}{Z}  \\[1em]
+    v(x,y) = \frac{-V + yW}{Z}  \\ 
+    $$
+    + Since $Z$ is constant we can replace it with $z_0$ (distance to plane)
+    $$
+    u(x,y) = \frac{-U + xW}{z_0}  \\[1em]
+    v(x,y) = \frac{-V + yW}{z_0}  \\ 
+    $$
+    + Flow will be along lines that pass through the camera center
+    + Flow values increase as you move further away from the origin since they are linear with $x$ and $y$
+    $$
+    (u(x,y), v(x,y)) = \frac{W}{k} \cdot (x,y)
+    $$
+
+- What if the camera is rotating in the previous problem? Find new optical flow function
+    + Sum of translational and rotational optical flow
+    $$
+    u = \frac{W}{Z} (x - \frac{U}{W}) + \alpha x y - \beta(1+x^2) + \gamma y \\[1em]
+    v = \frac{W}{Z} (y - \frac{V}{W}) + \dot{y} = \alpha(1 + y^2) - \beta x y + \gamma x
+    $$
+- Suppose a camera is rotating & translating -> Find rotation & translation given an optical flow field
+    + Only have W and $\gamma$ -> Moving straight and rotating around axis of translation (*i.e. corkscrew*)
+    + Derotate -> Check if flow makes a pencil
+
+- Find probability of success for RANSAC
+    + $p$ is the probability of choosing a good set of points
+    + What is the probability of success after $N$ iterations?
+    + Need to pick 4 points for homography 
+
+    $$
+    p_success = 1 - (1-p^4)^N
+    $$
+
