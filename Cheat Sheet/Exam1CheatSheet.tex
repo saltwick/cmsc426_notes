@@ -211,7 +211,7 @@ For each iteration, probability of outlier is
 \]
 After $i$ iterations, probability of at least 1 iteration having zero outliers:
 \[
-   1 - p^i = c, c = text{required confidence}     
+   1 - p^i = c, c = \text{required confidence}     
 \]
 Solve above for $i$ or find number of iterations $N$ with required probability $p$ and outlier ratio $e$, and points required $n$
 \[
@@ -223,7 +223,7 @@ Harris Corner Detector
 \begin{enumerate}
         \item Compute image derivatives $I_x, I_y$ by convolving I with derivatives of Gaussian filter
         \item Form Harris Matrix $\implies H(x,y) = \sum_{u,v} g(u,v) \begin{bmatrix}I_x^2 & I_x I_y \\ I_x I_y & I_y^2\end{bmatrix}$
-        \item Select points such that $K(x,y) = frac{det(H)}{trace(H)}$ is above a threshold
+        \item Select points such that $K(x,y) = \frac{det(H)}{trace(H)}$ is above a threshold
         \item Perform non-maximal suppression
 \end{enumerate}
 Invariant means that the value of the descriptor shouldn't change when the image undergoes a change in appearance (brightness, rotation, etc.)
