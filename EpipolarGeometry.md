@@ -109,6 +109,8 @@ $$
     + **Stereo**: We know the viewing geometry (extrinsic parameters) and the intrinsic parameters => Find correspondences exploiting epipolar geometry, then reconstruct
     + **Structure from motion**: Find correspondences -> estimate extrinsic parameters (rotation and translation) -> reconstruct
     + **Uncalibrated Cameras**: Find correspondences -> compute projection matrices -> reconstruct up to a projective transformation
+        - Don't know the position of camera respective to origin
+        - Can't find the orientation of camera plane
     + **Triangulation**
         - If cameras are intrinsically and extrinsically calibrated => find P as the midpoint of the common perpendicular to the two rays in space
     + Intrinsically calibrated cameras
@@ -123,3 +125,45 @@ $$
         W = \begin{bmatrix}0&-1&0\\1&0&0\\0&0&1\end{bmatrix} \text{ and } Z = \begin{bmatrix}0&1&0\\-1&0&0\\0&0&0\end{bmatrix}
         $$
         + Multiple solutions -> One with positive values is correct
+    + Linear Triangulation
+        - Homogenous System
+        $$
+        x = MX \hspace{3em} x' = M'X
+        \\[.5em]
+        x \times MX = 0 \hspace{3em} x' \times M'X' = 0
+        \\[.5em]
+        A = \begin{bmatrix} xm_3^T & -m_1^T \\[1em] ym_3^T & -m_2^T \\[1em] x'm_3^T & -m'^T_3 \\[1em] y'm_3^T & -m'^T_2 \end{bmatrix}
+        \\[1em]
+        AX = 0 
+        $$
+        - X is the last column of V in the SVD of A
+    + Projective Reconstruction Theorem
+        - Assume we determine matching points $x_i$ and $x'_i$. Then we can compute a unique Fundamental matrix $F$
+        - The camera matrices $M,M'$ cannot be recovered uniquely
+        - Thus the reconstruction $X_i$ is not unique
+        - There exists a projective transformation H
+        - Reconstructive Ambiguity
+            $$ 
+            x_i = MX_i = (MH_P^{-1})(H_pX_i)
+            $$
+            + Two different objects produce the same image since the cameras are uncalibrated
+            + Find the original distorted by a projective transformation $H$ -> *Projective Reconstruction*
+            + If reconstruction is derived from real images -> there is a true reconstruction that can produce the actual points $X_i$ of the scene
+        - Consequences
+            + We can compute a projective reconstruction of a scene from 2 views based on image correspondences alone
+            + Don't need anything about poses or calibration
+    + Projective -> Metric 
+        - Compute homography $H$ such that $X_{Ei}=HX_i$ for 5 or more control points $X_{Ei}$
+        - Rectification using 5 points
+            + Compute projective reconstruction
+            + Find 5+ control points
+            + Use them to solve for projective transformation (9 DOF) and rectify the projective reconstruction
+    + Stratified Reconstruction
+        - Begin with projective reconstruction
+        - Refine it to affine reconstruction
+            + Parallel lines are parallel, ratios along parallel lines are correct
+            + Reconstructed scene is then an affine transformation of the actual scene
+        - Refine to a metric reconstruction
+            + Angles and ratios are correct
+            + Reconstructed scene is then a scaled version of the actual scene
+            
