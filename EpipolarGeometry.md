@@ -161,9 +161,26 @@ $$
     + Stratified Reconstruction
         - Begin with projective reconstruction
         - Refine it to affine reconstruction
+            + Fix plane to infinity
             + Parallel lines are parallel, ratios along parallel lines are correct
             + Reconstructed scene is then an affine transformation of the actual scene
         - Refine to a metric reconstruction
+            + Use orthogonality
             + Angles and ratios are correct
             + Reconstructed scene is then a scaled version of the actual scene
+    + Reconstruction from N views
+        - Projective or affine reconstruction from large set of images
+        - Given a set of camera $M^i$
+        - For each camera $M^i$ -> set of image point $x_j^i$
+        - Find 3D points $X_j$ and cameras $M^i$, such that $M^iX_j = x_j^i$
+    + Bundle Adjustment
+        - Solve following minimization problem
+        - Find $M^i$ and $X_j$ that minimize
+        $$
+            \sum_{i,j} d(M^iX_j, x_j^i)^2
+        $$
+        - Levenberg Marquardt algorithm
+        - Problems
+            + Many parameters -> 11 per camera, 3 per 3D point
+        - Useful as final adjustment step for bundles of arrays
             
