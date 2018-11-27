@@ -173,6 +173,11 @@ $$
         - Given a set of camera $M^i$
         - For each camera $M^i$ -> set of image point $x_j^i$
         - Find 3D points $X_j$ and cameras $M^i$, such that $M^iX_j = x_j^i$
+    + Reconstruction from intrinsically calibrated cameras
+        - Compute the essential matrix $E$ using normalized points
+        - Find T and R from $SVD(E)$
+        - Select M = [I|0] and M' = [R|T] then E = [$T_x$]R
+
     + Bundle Adjustment
         - Solve following minimization problem
         - Find $M^i$ and $X_j$ that minimize
@@ -183,4 +188,25 @@ $$
         - Problems
             + Many parameters -> 11 per camera, 3 per 3D point
         - Useful as final adjustment step for bundles of arrays
+    + **Linear Triangulation**
+        - $x = MX$ where x is the camera point and X is the world point
+        - x || MX -> $x \times MX = 0$
+        - $x' = M'X$ -> $x' \times M'X = 0$
+        - $M$ is 3$\times$4 with rows $m_1^T, m_2^T, m_3^T$
+        $$
+        M = \begin{bmatrix} m_1^T \\[.5em] m_2^T \\[.5em] m_3^T\end{bmatrix} \implies
+        MX = \begin{bmatrix} m_1^TX \\[.5em] m_2^TX \\[.5em] m_3^TX\end{bmatrix}
+        \\[1em]
+        \begin{pmatrix} x \\ y \\ 1\end{pmatrix} \times \begin{bmatrix} m_1^TX \\[.5em] m_2^TX \\[.5em] m_3^TX\end{bmatrix} = 0
+        \\[1em]
+        x(m_3^TX) - (m_1^TX) = 0 \\[.5em] y(m_3^TX) - (m_2^TX) = 0 \\[.5em] \underbrace{x(m_2^TX) - y(m_1^TX) = 0}_\text{Linear combination of first two}
+        \\[1em]
+        A = \begin{bmatrix} xm_3^T & -m_1^T \\[1em] ym_3^T & -m_2^T \\[1em] x'm_3^{'T} & -m_1^{'T} \\[1em] y'm_3^{'T} & -m_2^{'T}\end{bmatrix}
+        $$
+        - Homogeneous System -> $AX = 0$
+        - X is the last column of V in the SVD of $A = U\Sigma V^T$
+    + Geometric Error
+        - $d(x,\hat{x})^2 + d(x',\hat{x'})^2$ subject to $\hat{x'^T}F\hat{x} = 0$
+        -$\hat{x} = M\hat{X}$ and $\hat{x'} = M\hat{X'}$
+        - Reconstruct matches in projective frame by minimizing reprojection error
             
